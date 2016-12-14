@@ -4,7 +4,17 @@
 # To configure the build options either use the CMake gui, or run the command
 # line utility including the "-i" option.
 
+
+
 set(CMAKE_LEGACY_CYGWIN_WIN32 0)
+
+option(HUNTER_ENABLED "Enable Hunter package manager" OFF) 
+
+include("cmake/HunterGate.cmake")
+HunterGate(
+	URL "https://github.com/ruslo/hunter/archive/v0.17.3.tar.gz"
+	SHA1 "2a2f193860e2cb3b884bce74d85c3f30b1092274"
+)
 
 project(mosquitto)
 
@@ -58,6 +68,7 @@ option(WITH_TLS_PSK
 option(WITH_EC
 	"Include Elliptic Curve support (requires WITH_TLS)?" ON)
 if (${WITH_TLS} STREQUAL ON)
+	hunter_add_package(OpenSSL)
 	find_package(OpenSSL REQUIRED)
 	add_definitions("-DWITH_TLS")
 
